@@ -20,28 +20,41 @@
   </div>
 
   <script>
-    // Dein geheimer Zugangscode
-    const SECRET_CODE = "GEHEIM2025";
+    // URL der CSV-Datei
+    const CSV_URL = "https://ogeso25.github.io/Cargo/codes.csv";
 
-    // Referenzen zu den DOM-Elementen
+    // Variablen
     const accessCodeInput = document.getElementById('accessCode');
     const validateButton = document.getElementById('validateButton');
     const ticketButton = document.getElementById('ticketButton');
     const stripeButton = document.getElementById('stripeButton');
 
-    // Variable, um den Status der Codeprüfung zu speichern
+    // Variable, um die Liste gültiger Codes zu speichern
+    let validCodes = [];
     let codeVerified = false;
+
+    // Funktion: CSV-Datei laden
+    async function loadCodes() {
+      try {
+        const response = await fetch(CSV_URL);
+        const csvText = await response.text();
+        const rows = csvText.split("\n").map(row => row.trim());
+        validCodes = rows.slice(1); // Erste Zeile (Header) überspringen
+      } catch (error) {
+        console.error("Fehler beim Laden der CSV-Datei:", error);
+      }
+    }
 
     // Funktion: Zugangscode prüfen
     function validateCode() {
       const userCode = accessCodeInput.value;
 
-      if (userCode === SECRET_CODE) {
-        codeVerified = true; // Zugangscode ist korrekt
-        ticketButton.classList.remove('hidden'); // Button sichtbar machen
+      if (validCodes.includes(userCode)) {
+        codeVerified = true;
+        ticketButton.classList.remove('hidden'); // Ticket-Button anzeigen
         alert('Code korrekt! Der Ticket-Button ist jetzt sichtbar.');
       } else {
-        codeVerified = false; // Zugangscode ist falsch
+        codeVerified = false;
         alert('Falscher Code. Bitte versuche es erneut.');
       }
     }
@@ -49,16 +62,18 @@
     // Event-Listener für den "Code überprüfen"-Button
     validateButton.addEventListener('click', validateCode);
 
-    // Event-Listener für den "Festival Ticket"-Button (Stripe-Link)
+    // Event-Listener für den Stripe-Button
     stripeButton.addEventListener('click', function (e) {
       if (!codeVerified) {
         e.preventDefault(); // Verhindert Weiterleitung
         alert('Bitte überprüfe zuerst deinen Zugangscode.');
       } else {
-        // Öffnet Stripe-Link nur bei korrektem Code
         window.open('https://buy.stripe.com/9AQdUR4g96LybVS7sw', '_blank');
       }
     });
+
+    // Lade die Codes beim Start der Seite
+    loadCodes();
   </script>
 </body>
 </html>

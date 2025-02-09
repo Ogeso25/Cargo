@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Festival Ticket</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Festival Ticket</h1>
+  <p>Bitte gib deinen Zugangscode ein, um den Ticket-Link zu sehen:</p>
+
+  <!-- Eingabefeld für den Code -->
+  <input type="password" id="accessCode" class="input-field" placeholder="Geheimer Zugangscode">
+  <button id="validateButton" class="button-5">Code überprüfen</button>
+
+  <!-- Der Button zum Kaufen, standardmäßig versteckt -->
+  <div id="ticketButton" class="hidden">
+    <a href="https://buy.stripe.com/9AQdUR4g96LybVS7sw" class="button-5">Festival Ticket</a>
+  </div>
+
+  <!-- Verweis auf die JavaScript-Datei -->
+  <script src="script.js"></script>
+</body>
+</html>

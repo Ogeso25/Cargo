@@ -1,75 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Festival Ticket</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>Festival Ticket</h1>
   <p>Bitte gib deinen Zugangscode ein, um den Ticket-Link zu sehen:</p>
 
   <!-- Eingabefeld für den Code -->
+  <input type="password" id="accessCode" class="
   <input type="password" id="accessCode" class="input-field" placeholder="Geheimer Zugangscode">
-  <button id="validateButton" class="button-5" disabled>Code überprüfen</button>
-
+  <button id="validateButton" class="button-5">Code überprüfen</button>
   <!-- Der Button zum Kaufen, standardmäßig versteckt -->
   <div id="ticketButton" class="hidden">
     <button id="stripeButton" class="button-5">Festival Ticket</button>
   </div>
-
   <script>
-    const CSV_URL = "https://ogeso25.github.io/Cargo/codes.csv";
-
+    // Dein geheimer Zugangscode
+    const SECRET_CODE = "GEHEIM2025";
+    // Referenzen zu den DOM-Elementen
     const accessCodeInput = document.getElementById('accessCode');
     const validateButton = document.getElementById('validateButton');
     const ticketButton = document.getElementById('ticketButton');
     const stripeButton = document.getElementById('stripeButton');
-
-    let validCodes = [];
+    // Variable, um den Status der Codeprüfung zu speichern
     let codeVerified = false;
-
-    async function loadCodes() {
-      try {
-        const response = await fetch(CSV_URL);
-        const csvText = await response.text();
-        const rows = csvText.split("\n").map(row => row.trim());
-        validCodes = rows.slice(1).filter(row => row !== ""); // Entferne Leerzeichen/Leerzeilen
-        console.log("Gültige Codes geladen:", validCodes); // Debugging
-      } catch (error) {
-        console.error("Fehler beim Laden der CSV-Datei:", error);
-        alert("Fehler beim Laden der Codes. Bitte versuchen Sie es später erneut.");
-      }
-    }
-
+    // Funktion: Zugangscode prüfen
     function validateCode() {
-      const userCode = accessCodeInput.value.trim(); // Entferne Leerzeichen
-      const lowerCaseCodes = validCodes.map(code => code.toLowerCase());
-      if (lowerCaseCodes.includes(userCode.toLowerCase())) {
-        codeVerified = true;
-        ticketButton.classList.remove('hidden');
+      const userCode = accessCodeInput.value;
+      if (userCode === SECRET_CODE) {
+        codeVerified = true; // Zugangscode ist korrekt
+        ticketButton.classList.remove('hidden'); // Button sichtbar machen
         alert('Code korrekt! Der Ticket-Button ist jetzt sichtbar.');
       } else {
-        codeVerified = false;
+        codeVerified = false; // Zugangscode ist falsch
         alert('Falscher Code. Bitte versuche es erneut.');
       }
     }
-
+    // Event-Listener für den "Code überprüfen"-Button
+    validateButton.addEventListener('click', validateCode);
+    // Event-Listener für den "Festival Ticket"-Button (Stripe-Link)
     stripeButton.addEventListener('click', function (e) {
       if (!codeVerified) {
-        e.preventDefault();
+        e.preventDefault(); // Verhindert Weiterleitung
         alert('Bitte überprüfe zuerst deinen Zugangscode.');
       } else {
+        // Öffnet Stripe-Link nur bei korrektem Code
         window.open('https://buy.stripe.com/9AQdUR4g96LybVS7sw', '_blank');
       }
     });
-
-    loadCodes().then(() => {
-      validateButton.disabled = false; // Button aktivieren
-    });
-
-    validateButton.addEventListener('click', validateCode);
   </script>
 </body>
 </html>

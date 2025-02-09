@@ -4,7 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Festival Ticket</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Verstecke den Button standardmäßig */
+    .hidden {
+      display: none;
+    }
+
+    /* Eingabemaske: Optisch dynamisch */
+    .input-field {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+      width: 100%;
+      max-width: 300px;
+      margin: 10px 0;
+      box-sizing: border-box;
+    }
+
+    .input-field:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px #4CAF50;
+    }
+
+    /* Button-Stil */
+    .button-5 {
+      padding: 10px 20px;
+      font-size: 16px;
+      color: white;
+      background-color: #4CAF50;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .button-5:hover {
+      background-color: #45a049;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+  </style>
 </head>
 <body>
   <h1>Festival Ticket</h1>
@@ -16,10 +57,44 @@
 
   <!-- Der Button zum Kaufen, standardmäßig versteckt -->
   <div id="ticketButton" class="hidden">
-    <a href="https://buy.stripe.com/9AQdUR4g96LybVS7sw" class="button-5">Festival Ticket</a>
+    <a href="#" id="stripeLink" class="button-5">Festival Ticket</a>
   </div>
 
-  <!-- Verweis auf die JavaScript-Datei -->
-  <script src="script.js"></script>
+  <script>
+    // Dein geheimer Zugangscode
+    const SECRET_CODE = "GEHEIM2025";
+
+    // Referenzen zu den DOM-Elementen
+    const accessCodeInput = document.getElementById('accessCode');
+    const validateButton = document.getElementById('validateButton');
+    const ticketButton = document.getElementById('ticketButton');
+    const stripeLink = document.getElementById('stripeLink');
+
+    // Überprüfe den Zugangscode beim Klick auf "Code überprüfen"
+    validateButton.addEventListener('click', function () {
+      const userCode = accessCodeInput.value;
+
+      if (userCode === SECRET_CODE) {
+        // Überprüfen, ob der Button sichtbar ist
+        if (!ticketButton.classList.contains('hidden')) return;
+
+        // Code korrekt: Ticket-Button anzeigen und aktivieren
+        ticketButton.classList.remove('hidden');
+        stripeLink.setAttribute("href", "https://buy.stripe.com/9AQdUR4g96LybVS7sw");
+        alert('Code korrekt! Der Ticket-Button ist jetzt sichtbar.');
+      } else {
+        // Falscher Code: Fehlerhinweis
+        alert('Falscher Code. Bitte versuche es erneut.');
+      }
+    });
+
+    // Stripe-Link-Button verhindern, wenn kein Code geprüft wurde
+    stripeLink.addEventListener('click', function (e) {
+      if (!stripeLink.href || stripeLink.getAttribute("href") === "#") {
+        e.preventDefault(); // Verhindert ungewollte Weiterleitung
+        alert('Bitte überprüfe zuerst deinen Zugangscode.');
+      }
+    });
+  </script>
 </body>
 </html>

@@ -57,7 +57,7 @@
 
   <!-- Der Button zum Kaufen, standardmäßig versteckt -->
   <div id="ticketButton" class="hidden">
-    <a href="https://buy.stripe.com/9AQdUR4g96LybVS7sw" class="button-5">Festival Ticket</a>
+    <a id="stripeButton" href="https://buy.stripe.com/9AQdUR4g96LybVS7sw" class="button-5" target="_blank">Festival Ticket</a>
   </div>
 
   <script>
@@ -68,15 +68,13 @@
     const accessCodeInput = document.getElementById('accessCode');
     const validateButton = document.getElementById('validateButton');
     const ticketButton = document.getElementById('ticketButton');
+    const stripeButton = document.getElementById('stripeButton');
 
     // Überprüfe den Zugangscode beim Klick auf "Code überprüfen"
     validateButton.addEventListener('click', function () {
       const userCode = accessCodeInput.value;
 
       if (userCode === SECRET_CODE) {
-        // Überprüfen, ob der Button sichtbar ist
-        if (!ticketButton.classList.contains('hidden')) return;
-
         // Code korrekt: Ticket-Button anzeigen
         ticketButton.classList.remove('hidden');
         alert('Code korrekt! Der Ticket-Button ist jetzt sichtbar.');
@@ -86,10 +84,12 @@
       }
     });
 
-    // Öffne den Stripe-Link in einem neuen Tab, wenn der Button angeklickt wird
-    document.querySelector(".button-5").addEventListener("click", function (e) {
-      e.preventDefault(); // Verhindere standardmäßiges Verhalten
-      window.open("https://buy.stripe.com/9AQdUR4g96LybVS7sw", "_blank");
+    // Blockiere Stripe-Link, wenn der Zugangscode nicht geprüft wurde
+    stripeButton.addEventListener('click', function (e) {
+      if (ticketButton.classList.contains('hidden')) {
+        e.preventDefault(); // Verhindert Weiterleitung
+        alert('Bitte überprüfe zuerst deinen Zugangscode.');
+      }
     });
   </script>
 </body>

@@ -12,7 +12,7 @@
 
   <!-- Eingabefeld für den Code -->
   <input type="password" id="accessCode" class="input-field" placeholder="Geheimer Zugangscode">
-  <button id="validateButton" class="button-5">Code überprüfen</button>
+  <button id="validateButton" class="button-5" disabled>Code überprüfen</button>
 
   <!-- Der Button zum Kaufen, standardmäßig versteckt -->
   <div id="ticketButton" class="hidden">
@@ -20,38 +20,35 @@
   </div>
 
   <script>
-    // URL der CSV-Datei
     const CSV_URL = "https://ogeso25.github.io/Cargo/codes.csv";
 
-    // Variablen
     const accessCodeInput = document.getElementById('accessCode');
     const validateButton = document.getElementById('validateButton');
     const ticketButton = document.getElementById('ticketButton');
     const stripeButton = document.getElementById('stripeButton');
 
-    // Variable, um die Liste gültiger Codes zu speichern
     let validCodes = [];
     let codeVerified = false;
 
-    // Funktion: CSV-Datei laden
     async function loadCodes() {
       try {
         const response = await fetch(CSV_URL);
         const csvText = await response.text();
         const rows = csvText.split("\n").map(row => row.trim());
-        validCodes = rows.slice(1); // Erste Zeile (Header) überspringen
+        validCodes = rows.slice(1).filter(row => row !== ""); // Entferne Leerzeichen/Leerzeilen
+        console.log("Gültige Codes geladen:", validCodes); // Debugging
       } catch (error) {
         console.error("Fehler beim Laden der CSV-Datei:", error);
+        alert("Fehler beim Laden der Codes. Bitte versuchen Sie es später erneut.");
       }
     }
 
-    // Funktion: Zugangscode prüfen
     function validateCode() {
-      const userCode = accessCodeInput.value;
-
-      if (validCodes.includes(userCode)) {
+      const userCode = accessCodeInput.value.trim(); // Entferne Leerzeichen
+      const lowerCaseCodes = validCodes.map(code => code.toLowerCase());
+      if (lowerCaseCodes.includes(userCode.toLowerCase())) {
         codeVerified = true;
-        ticketButton.classList.remove('hidden'); // Ticket-Button anzeigen
+        ticketButton.classList.remove('hidden');
         alert('Code korrekt! Der Ticket-Button ist jetzt sichtbar.');
       } else {
         codeVerified = false;
@@ -59,21 +56,20 @@
       }
     }
 
-    // Event-Listener für den "Code überprüfen"-Button
-    validateButton.addEventListener('click', validateCode);
-
-    // Event-Listener für den Stripe-Button
     stripeButton.addEventListener('click', function (e) {
       if (!codeVerified) {
-        e.preventDefault(); // Verhindert Weiterleitung
+        e.preventDefault();
         alert('Bitte überprüfe zuerst deinen Zugangscode.');
       } else {
         window.open('https://buy.stripe.com/9AQdUR4g96LybVS7sw', '_blank');
       }
     });
 
-    // Lade die Codes beim Start der Seite
-    loadCodes();
+    loadCodes().then(() => {
+      validateButton.disabled = false; // Button aktivieren
+    });
+
+    validateButton.addEventListener('click', validateCode);
   </script>
 </body>
 </html>

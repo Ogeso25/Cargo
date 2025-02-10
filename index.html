@@ -6,7 +6,7 @@
   <button id="validateButton" class="button-5">Code überprüfen</button>
   <!-- Der Button zum Kaufen, standardmäßig versteckt -->
   <div id="ticketButton" class="hidden">
-    <button id="stripeButton" class="button-5">Festival Ticket</button>
+    <button id="stripeButton" class="button-5">Mitgliedschaft abschließen</button>
   </div>
   <script>
     // Dein geheimer Zugangscode
@@ -24,7 +24,7 @@
       if (userCode === SECRET_CODE) {
         codeVerified = true; // Zugangscode ist korrekt
         ticketButton.classList.remove('hidden'); // Button sichtbar machen
-        alert('Code korrekt! Der Ticket-Button ist jetzt sichtbar.');
+        alert('Code korrekt! Klick auf den Button und schließe auf einer externen Seite eine Mitgliedschaft ab.');
       } else {
         codeVerified = false; // Zugangscode ist falsch
         alert('Falscher Code. Bitte versuche es erneut.');

@@ -2,7 +2,7 @@
 
   <!-- Eingabefeld für den Code -->
   <input type="password" id="accessCode" class="
-  <input type="password" id="accessCode" class="input-field" placeholder="Geheimer Zugangscode">
+  <input type="password" id="accessCode" class="input-field" placeholder="Zugangscode">
   <button id="validateButton" class="button-5">Code überprüfen</button>
   <!-- Der Button zum Kaufen, standardmäßig versteckt -->
   <div id="ticketButton" class="hidden">
@@ -24,10 +24,10 @@
       if (userCode === SECRET_CODE) {
         codeVerified = true; // Zugangscode ist korrekt
         ticketButton.classList.remove('hidden'); // Button sichtbar machen
-        alert('Code korrekt! Klick auf den Button und schließe auf einer externen Seite eine Mitgliedschaft ab.');
+        alert('Zugangscode korrekt! Klick auf den Button und schließe auf einer externen Seite die Mitgliedschaft ab.');
       } else {
         codeVerified = false; // Zugangscode ist falsch
-        alert('Falscher Code. Bitte versuche es erneut.');
+        alert('Falscher Zugangscode. Bitte versuche es erneut.');
       }
     }
     // Event-Listener für den "Code überprüfen"-Button
